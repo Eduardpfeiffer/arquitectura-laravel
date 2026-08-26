@@ -26,10 +26,14 @@ const props = defineProps({
 });
 
 const assets = {
-    hero: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80',
-    services: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=80',
-    about: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1200&q=80',
-    portfolio: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80',
+    heroImages: [
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=80',
+        '/images/nova-hero.jpg',
+    ],
+    services: '/images/nova-services.jpg',
+    about: '/images/nova-about.jpg',
+    portfolio: '/images/nova-portfolio.jpg',
+    mark: '/images/nova-mark.png',
 };
 
 const menuOpen = ref(false);
@@ -39,6 +43,8 @@ const projectOpen = ref(null);
 const formStep = ref(1);
 const formSent = ref(false);
 const isScrolled = ref(false);
+const heroIndex = ref(0);
+let heroTimer = null;
 
 const form = useForm({
     name: '',
@@ -92,8 +98,16 @@ function previousProject() {
 function onScroll() {
     isScrolled.value = window.scrollY > 30;
 }
-onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }));
-onUnmounted(() => window.removeEventListener('scroll', onScroll));
+onMounted(() => {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    heroTimer = setInterval(() => {
+        heroIndex.value = (heroIndex.value + 1) % assets.heroImages.length;
+    }, 6000);
+});
+onUnmounted(() => {
+    window.removeEventListener('scroll', onScroll);
+    clearInterval(heroTimer);
+});
 
 function handleContactSubmit() {
     if (formStep.value < 3) {
@@ -122,6 +136,7 @@ function resetForm() {
         <header :class="['site-header', isScrolled ? 'site-header-scrolled' : '']">
             <div class="header-inner">
                 <a href="#inicio" class="brand" aria-label="Nova Atelier, inicio">
+                    <img :src="assets.mark" alt="" class="brand-mark" />
                     <span class="brand-copy"><strong>nova</strong><small>atelier</small></span>
                 </a>
                 <nav :class="['main-nav', menuOpen ? 'main-nav-open' : '']" aria-label="Navegación principal">
@@ -140,7 +155,13 @@ function resetForm() {
         </header>
 
         <section class="hero-section" aria-labelledby="hero-title">
-            <img :src="assets.hero" alt="Interior contemporáneo con piedra, madera y luz natural" class="hero-image" />
+            <img
+                v-for="(image, index) in assets.heroImages"
+                :key="image"
+                :src="image"
+                alt="Interior contemporáneo con piedra, madera y luz natural"
+                :class="['hero-image', index === heroIndex ? 'hero-image-active' : '']"
+            />
             <div class="hero-overlay" />
             <div class="hero-content">
                 <div class="hero-kicker"><span class="kicker-dot" /> Arquitectura · Diseño · Construcción</div>
@@ -276,7 +297,7 @@ function resetForm() {
         </section>
 
         <footer class="site-footer">
-            <div class="footer-top"><span class="brand-copy"><strong>nova</strong><small>atelier</small></span><p>Arquitectura para vivir<br /><em>mejor.</em></p></div>
+            <div class="footer-top"><span class="brand"><img :src="assets.mark" alt="" class="brand-mark" /><span class="brand-copy"><strong>nova</strong><small>atelier</small></span></span><p>Arquitectura para vivir<br /><em>mejor.</em></p></div>
             <div class="footer-columns">
                 <div><span class="footer-heading">Navegar</span><a href="#inicio">Inicio</a><a href="#servicios">Servicios</a><a href="#nosotros">Nosotros</a><a href="#portafolio">Portafolio</a><a href="#contacto">Contacto</a></div>
                 <div><span class="footer-heading">Síguenos</span><a href="#instagram"><Instagram :size="15" /> Instagram</a><a href="#linkedin"><Linkedin :size="15" /> LinkedIn</a><a href="#whatsapp"><Phone :size="15" /> WhatsApp</a></div>
