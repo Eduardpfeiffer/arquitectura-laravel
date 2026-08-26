@@ -10,6 +10,7 @@ import {
     ChevronRight,
     Instagram,
     Linkedin,
+    Mail,
     MapPin,
     Menu,
     Minus,
@@ -17,6 +18,8 @@ import {
     Play,
     Plus,
     Send,
+    User,
+    Wallet,
     X,
 } from 'lucide-vue-next';
 
@@ -248,9 +251,9 @@ function resetForm() {
 
                     <div v-if="formStep === 1" class="form-step">
                         <label for="name">¿Cómo te llamamos?</label>
-                        <input id="name" required placeholder="Tu nombre completo" autocomplete="name" v-model="form.name" />
+                        <div class="input-icon"><User :size="15" /><input id="name" required placeholder="Tu nombre completo" autocomplete="name" v-model="form.name" /></div>
                         <label for="email">¿Dónde te respondemos?</label>
-                        <input id="email" type="email" required placeholder="tu@email.com" autocomplete="email" v-model="form.email" />
+                        <div class="input-icon"><Mail :size="15" /><input id="email" type="email" required placeholder="tu@email.com" autocomplete="email" v-model="form.email" /></div>
                         <button class="button button-dark" type="submit">Siguiente <ArrowRight :size="16" /></button>
                     </div>
 
@@ -262,12 +265,12 @@ function resetForm() {
                             </label>
                         </div>
                         <label for="budget">Inversión estimada</label>
-                        <select id="budget" v-model="form.budgetRange">
+                        <div class="input-icon"><Wallet :size="15" /><select id="budget" v-model="form.budgetRange">
                             <option value="" disabled>Selecciona un rango</option>
                             <option>Hasta $25.000</option>
                             <option>$25.000 — $60.000</option>
                             <option>Más de $60.000</option>
-                        </select>
+                        </select></div>
                         <button class="button button-dark" type="submit">Continuar <ArrowRight :size="16" /></button>
                     </div>
 
@@ -275,7 +278,7 @@ function resetForm() {
                         <label for="message">Cuéntanos brevemente</label>
                         <textarea id="message" required placeholder="¿Qué te gustaría lograr en tu espacio?" rows="4" v-model="form.message" />
                         <label for="phone">Teléfono / WhatsApp</label>
-                        <input id="phone" type="tel" required placeholder="+57 300 000 0000" v-model="form.phone" />
+                        <div class="input-icon"><Phone :size="15" /><input id="phone" type="tel" required placeholder="+57 300 000 0000" v-model="form.phone" /></div>
                         <button class="button button-dark" type="submit" :disabled="form.processing">{{ form.processing ? 'Enviando…' : 'Enviar consulta' }} <Send :size="15" /></button>
                         <span class="form-note">Tus datos están protegidos. Solo los usaremos para responder a tu solicitud.</span>
                     </div>
